@@ -1,0 +1,258 @@
+$sidebar-color: #222222;
+$main-background: #303133;
+$container1: #262729;
+$container2: #2B2C2E;
+$container3: #3C3C3C;
+$container4: #1D1D1F;
+$blueContainer: #363749;
+$button1: #1E1F21;
+
+$font: 'Lato', sans-serif;
+
+$yellow-color: #ECB613;
+$blue-color: #6795DE;
+$orange-color: #CF4B32;
+$clone-wars-color: rgb(217, 217, 217);
+$grey-color: #C0C0C0;
+
+/**************** HOME STYLES *********/
+
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home-up {
+  display: flex;
+  margin-top: 55px;
+}
+
+.any-home-div {
+  margin-bottom: 15px;
+}
+
+.next-challenge {
+  padding-top: 20px;
+  padding-bottom: 30px;
+  height: 35vh;
+  width: 20vw;
+  background-color: $container1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#your-next-challenge {
+  align-self: flex-start;
+  margin-left: 1vw;
+}
+
+.challenge-selector-div {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-dropdown {
+  background-color: $sidebar-color;
+  color: #efefef;
+  border: none;
+  height: 35px;
+  width: 18vw;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-left: 5px;
+  margin-bottom: 30px;
+}
+
+#train-button {
+  border: none;
+  color: $container1;
+  background-color: $blue-color;
+}
+
+#skip-button {
+  background-color: rgba(0,0,0,0);
+  border: 1px solid $blue-color;
+  color: $blue-color;
+}
+
+.home-button:active {
+  transform: translateY(2px);
+  -webkit-box-shadow: inset -6px 5px 22px -4px rgba(0,0,0,0.75);
+  -moz-box-shadow: inset -6px 5px 22px -4px rgba(0,0,0,0.75);
+  box-shadow: inset -6px 5px 22px -4px rgba(0,0,0,0.75);
+}
+
+.home-button {
+  height: 30px;
+  width: 70px;
+  border-radius: 10%;
+  margin-left: 20px;
+}
+
+.challenge-details {
+  height: 35vh;
+  width: 40vw;
+  background-color: $container3;
+  padding-bottom: 10px;
+}
+
+.challenge-details-top {
+  display: flex;
+  align-items: center;
+  margin: 10px;
+}
+
+.random-kata-description-div {
+  overflow: scroll;
+  width: 40vw;
+  height: calc(25vh - 22px);
+  padding: 10px;
+}
+
+#random-kata-description {
+  color: #efefef;
+}
+
+.taggg-tag-div {
+  background-color: $container2;
+  display: inline-block;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+#taggg-tag {
+  margin: 0 10px;
+  color: #c9c9c9;
+}
+
+#taggg-tag:hover {
+  color: $blue-color;
+  -webkit-user-select: none;
+  cursor: pointer;
+}
+
+/***********ADS**********/
+.ads {
+  height: 20vh;
+  width: 60vw;
+  background-color: $container4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Original ratio 149 x 250 (width x height)
+#codewars-red-icon {
+  height: 83.3px;
+  width: 49.66px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.adsss-right {
+  height: 14vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#learn-about-red {
+  color: $orange-color;
+  border: 1px solid $orange-color;
+  background-color: rgba(0,0,0,0);
+  border-radius: 5%;
+  padding: 7px;
+  cursor: pointer;
+}
+
+#learn-about-red:active {
+  transform: translateY(2px);
+  -webkit-box-shadow: inset -6px 5px 22px -4px rgba(0,0,0,0.75);
+  -moz-box-shadow: inset -6px 5px 22px -4px rgba(0,0,0,0.75);
+  box-shadow: inset -6px 5px 22px -4px rgba(0,0,0,0.75);
+}
+
+/**********USER-COMPLETED-KATAS**********/
+.user-completed-katas {
+  width: 60vw;
+  background-color: $container3;
+}
+
+.repeat-completed-katas {
+  margin-left: 10px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.home-solutions-div {
+  margin-top: 5px;
+}
+
+.home-solution-button-div {
+  display: flex;
+}
+
+.show-solutions {
+  cursor: pointer;
+  margin-right: 30px;
+}
+
+.show-solutions:hover {
+  color: $blue-color;
+}
+
+.home-repeated-solutions-div {
+  height: 0px;
+  width: calc(60vw - 20px);
+}
+
+.vote-button {
+  background-color: rgba(0, 0, 0, 0);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 10px;
+  cursor: pointer;
+  border: none;
+}
+
+.vote-button:hover {
+  border: 1px solid #c9c9c9;
+  border-radius: 4%;
+}
+
+.vote-button:active {
+  transform: translateY(2px);
+  -webkit-box-shadow: inset -6px 5px 22px -4px rgba(0,0,0,0.75);
+  -moz-box-shadow: inset -6px 5px 22px -4px rgba(0,0,0,0.75);
+  box-shadow: inset -6px 5px 22px -4px rgba(0,0,0,0.75);
+}
+
+.home-bottom-border-hr {
+  width: 59vw;
+  margin-left: -5px;
+  background-image: -webkit-linear-gradient(left, transparent, rgba(255,255,255,0.1) 20%, rgba(255,255,255,0.1) 80%, transparent);
+  background-image: -moz-linear-gradient(left, transparent, rgba(255,255,255,0.1) 20%, rgba(255,255,255,0.1) 80%, transparent);
+  background-image: -ms-linear-gradient(left, transparent, rgba(255,255,255,0.1) 20%, rgba(255,255,255,0.1) 80%, transparent);
+  background-image: -o-linear-gradient(left, transparent, rgba(255,255,255,0.1) 20%, rgba(255,255,255,0.1) 80%, transparent);
+  background-image: -linear-gradient(left, transparent, rgba(255,255,255,0.1) 20%, rgba(255,255,255,0.1) 80%, transparent);
+}
+
+/**********ALLIES ***********/
+.allies {
+  width: 60vw;
+  //For whatever reason, having this height throws off the main page both height and width.
+  // height: 75vh;
+  background-color: $container3;
+}
+
+.allies-icon {
+  height: 15px;
+  width: 15px;
+  margin-horizontal: 10px;
+}

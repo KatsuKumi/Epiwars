@@ -1,0 +1,3 @@
+[submodule "epiwars-runner-cli"]
+	path = epiwars-runner-cli
+	url = https://github.com/KatsuKumi/epiwars-runner-cli
