@@ -8,7 +8,7 @@
         <p class="text-center text-body-2 my-5 text--secondary">The challenge will start in</p>
         <CountDown v-if="$store.state.challenge.info" :end-date="$store.state.challenge.info.startDate"></CountDown>
         <v-divider class="my-2"></v-divider>
-        <v-btn block color="primary" :disabled="!started">
+        <v-btn href="/challenge" block color="primary" :disabled="!started">
             Start challenge
         </v-btn>
     </v-card>
