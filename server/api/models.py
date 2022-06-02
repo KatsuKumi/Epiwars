@@ -6,7 +6,7 @@ from django.db.models import Model
 
 
 class User(AbstractUser):
-    pass
+    avatar = models.CharField(max_length=200, default="")
 
     # add additional fields in here
 

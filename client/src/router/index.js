@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import Home from '../views/Home.vue'
+import Challenge from '../views/Challenge.vue'
 
 Vue.use(VueRouter)
 
@@ -15,6 +16,11 @@ Vue.use(VueRouter)
     path: '/home',
     name: 'Homepage',
     component: Home
+  },
+  {
+    path: '/challenge',
+    name: 'Challenge',
+    component: Challenge
   }
 ]
 

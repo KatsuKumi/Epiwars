@@ -55,7 +55,7 @@ class GithubOAuthCallbackView(GithubOAuthMixin, View):
         for email in self.emails:
             if "@epitech.eu" in email["email"]:
                 self.email = email["email"]
-        self.user = self.get_user(self.data['login'], self.email)
+        self.user = self.get_user(self.data['login'], self.email, self.data['avatar_url'])
         self.save_token(self.user, self.token)
         signals.user_login.send(sender=None, request=self.user, token=self.token, emails=self.emails)
         return super().dispatch(*args, **kwargs)
@@ -73,9 +73,9 @@ class GithubOAuthCallbackView(GithubOAuthMixin, View):
     def get_user_model(self):
         return get_user_model()
 
-    def get_user(self, login, email):
+    def get_user(self, login, email, avatar):
         user_model = self.get_user_model()
-        defaults = {user_model.USERNAME_FIELD: login, "email": email}
+        defaults = {user_model.USERNAME_FIELD: login, "email": email, "avatar": avatar}
         kwargs = dict(id=self.data['id'])
         user, _ = user_model.objects.update_or_create(defaults, **kwargs)
         return user

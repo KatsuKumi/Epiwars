@@ -2,6 +2,7 @@
   <v-footer
     dark
     padless
+    v-if="$store.state.ui.showFooter"
   >
     <v-card
       flat

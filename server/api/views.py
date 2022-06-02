@@ -27,7 +27,9 @@ def check_auth(request):
 def me(request):
     if request.user.is_anonymous:
         raise PermissionDenied()
-    return JsonResponse({"username": request.user.username, "email": request.user.email}, encoder=ExtendedEncoder)
+    return JsonResponse({
+        "username": request.user.username, "email": request.user.email, "avatar": request.user.avatar
+    }, encoder=ExtendedEncoder)
 
 
 def challenge(request):

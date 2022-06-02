@@ -12,6 +12,9 @@ export default new Vuex.Store({
         auth: {
             user: null
         },
+        ui: {
+            showFooter: true
+        }
     },
     getters: {
         isAuthenticated: state => {
@@ -27,6 +30,12 @@ export default new Vuex.Store({
         },
         logout(state) {
             state.user = null
+        },
+        hideFooter(state) {
+            state.ui.showFooter = false;
+        },
+        showFooter(state) {
+            state.ui.showFooter = true;
         }
     },
     actions: {

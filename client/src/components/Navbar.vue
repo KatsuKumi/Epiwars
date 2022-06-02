@@ -5,10 +5,15 @@
         elevation="0"
         v-if="isAuthenticated"
     >
-        <v-toolbar-title>Homepage</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <span>Logged as : <b>{{ $store.state.auth.user.email }}</b></span>
-
+        <v-img
+            :src="$store.state.auth.user.avatar"
+            lazy-src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAQAAAC0NkA6AAAALElEQVR42u3NMQEAAAwCoNm/9DL4eEEBcgORSCQSiUQikUgkEolEIpFIJJ0HCt8AM0IRFnUAAAAASUVORK5CYII="
+            class="mx-4 rounded-circle"
+            elevation="1"
+            max-height="50" contain
+            max-width="50"
+        ></v-img>
+        <span><b>{{ $store.state.auth.user.email }}</b></span>
         <v-spacer></v-spacer>
 
         <v-btn
@@ -31,6 +36,9 @@ export default {
     },
 
     computed: {
+        currentRouteName() {
+            return this.$route.name;
+        },
         isAuthenticated() {
             return this.$store.getters["isAuthenticated"];
         }
