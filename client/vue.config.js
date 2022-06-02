@@ -1,7 +1,9 @@
 module.exports = {
     publicPath: process.env.NODE_ENV === 'production' ? '/static/dist/' : 'http://127.0.0.1:8080',
     outputDir: '../server/static/dist',
-    indexPath: '../../templates/base-vue.html', // relative to outputDir!
+
+    // relative to outputDir!
+    indexPath: '../../templates/base-vue.html',
 
     chainWebpack: config => {
         /*
@@ -18,10 +20,22 @@ module.exports = {
         https://cli.vuejs.org/config/#indexpath
         https://webpack.js.org/configuration/dev-server/#devserverwritetodisk-
         */
+        config.plugin('VuetifyLoaderPlugin').tap(args => [{
+          progressiveImages: true,
+          match (originalTag, { kebabTag, camelTag, path, component }) {
+            if (kebabTag.startsWith('core-')) {
+              return [camelTag, `import ${camelTag} from '@/components/core/${camelTag.substring(4)}.vue'`]
+            }
+          }
+        }])
         config.devServer
             .public('http://127.0.0.1:8080')
             .hotOnly(true)
             .headers({"Access-Control-Allow-Origin": "*"})
             .writeToDisk(filePath => filePath.endsWith('index.html'));
-    }
+    },
+
+    transpileDependencies: [
+      'vuetify'
+    ]
 }
