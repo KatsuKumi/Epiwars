@@ -1,5 +1,6 @@
 <template>
-  <v-card class="pa-2 rounded-lg mx-auto my-10" max-width="320" elevation="1" >
+  <v-card class="pa-2 rounded-lg mx-auto my-10" max-width="320" elevation="1"
+    color="#222327">
     <v-img class="mx-auto my-5" src="../assets/testlogo.png" max-height="100" max-width="100"
     lazy-src="" transition="scale-transition"></v-img>
     <p class="text-center text-h5 mb-5 text--secondary custom-font">Epiwars</p>

@@ -7,7 +7,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         challenge: {
-            info: null
+            info: null,
+            currentKata: null
         },
         auth: {
             user: null
@@ -28,6 +29,9 @@ export default new Vuex.Store({
         updateUser(state, user) {
             state.auth.user = user;
         },
+        updateCurrentKata(state, kata) {
+            state.challenge.currentKata = kata;
+        },
         logout(state) {
             state.user = null
         },
@@ -36,9 +40,24 @@ export default new Vuex.Store({
         },
         showFooter(state) {
             state.ui.showFooter = true;
-        }
+        },
+        updateCode(state, code) {
+            state.challenge.currentKata.saved_code = code;
+        },
+        updateExample(state, code) {
+            state.challenge.currentKata.saved_test = code;
+        },
     },
     actions: {
+        getCurrentKata: async ({ commit }) => {
+            try {
+                axios.get('/api/kata/current/')
+                    .then(response => { commit('updateCurrentKata', response.data) })
+                    .catch(error => { console.log(error) })
+            } catch (error) {
+                console.log(error)
+            }
+        },
         refreshCallenge: async ({state, commit, dispatch}) => {
             try {
                 axios
@@ -65,6 +84,19 @@ export default new Vuex.Store({
                 commit('logout')
             }
         },
+        saveCode: async ({state, commit, dispatch}) => {
+            try {
+                axios.post('/api/kata/current/', {
+                    code: state.challenge.currentKata.saved_code,
+                    test: state.challenge.currentKata.saved_test
+                }).then(response => {
+                }).catch(err => {
+                    console.log(err);
+                })
+            } catch (e) {
+                console.log(e);
+            }
+        }
     },
     modules: {}
 })

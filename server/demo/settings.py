@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'constance.backends.database',
+    'sortedm2m',
+    'constance',
     'api'
 ]
 
@@ -130,3 +133,9 @@ AUTH_USER_MODEL = 'api.User'
 AUTHENTICATION_BACKENDS = ('github_auth.backend.Backend',)  # passwordless auth
 LOGIN_REDIRECT_URL = '/home'
 LOGOUT_REDIRECT_URL = '/'
+
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+
+CONSTANCE_CONFIG = {
+    'CHALLENGE_ID': (1, 'Challenge to use for the hackathon'),
+}

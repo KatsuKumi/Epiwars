@@ -26,10 +26,18 @@ export default {
 
   computed: {
     timeCalculated () {
-      const endDateDateTimeObj = DateTime.fromISO(this.endDate)
-      const theDiff = endDateDateTimeObj.diff(this.now, ['hours', 'minutes', 'seconds'])
+        const endDateDateTimeObj = DateTime.fromISO(this.endDate)
+        const theDiff = endDateDateTimeObj.diff(this.now, ['hours', 'minutes', 'seconds'])
 
-      return `${theDiff.hours} h ${('0' + theDiff.minutes).slice(-2)} m ${('0' + Math.round(theDiff.seconds)).slice(-2)} s`
+        if (theDiff.hours > 0) {
+            return `${theDiff.hours}h ${('0' + theDiff.minutes).slice(-2)}m ${('0' + theDiff.seconds).slice(-2)}s`
+        } else if (theDiff.minutes > 0) {
+            return `${theDiff.minutes}m ${('0' + theDiff.seconds).slice(-2)}s`
+        } else if (theDiff.seconds > 0) {
+            return `${theDiff.seconds}s`
+        } else {
+            return '0s'
+        }
     }
   },
 

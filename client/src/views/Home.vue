@@ -1,8 +1,11 @@
 <template>
-    <v-card class="pa-2 rounded-lg mx-auto my-10" max-width="320" elevation="1">
+    <v-card class="pa-2 rounded-lg mx-auto my-10" max-width="320" elevation="1"
+    color="#222327">
         <v-img class="mx-auto my-5" src="../assets/testlogo.png" max-height="100" max-width="100"
                lazy-src="" transition="scale-transition"></v-img>
-        <div class="text-center text-h5 mb-5 text--secondary custom-font rainbow-text animated" data-splitting>{{ challengeName }}
+        <div class="text-center text-h5 mb-5 text--secondary custom-font rainbow-text animated">{{ challengeName }}
+        </div>
+        <div class="text-center text-subtitle-1 mb-5 text--secondary custom-font">{{ challengeDescription }}
         </div>
         <v-divider class="my-2"></v-divider>
         <p class="text-center text-body-2 my-5 text--secondary">The challenge will start in</p>
@@ -37,6 +40,11 @@ export default {
                 return null;
             return this.$store.state.challenge.info.name
         },
+        challengeDescription() {
+            if (this.$store.state.challenge.info === null)
+                return null;
+            return this.$store.state.challenge.info.description
+        }
     },
     created() {
         this.$store.dispatch("refreshCallenge");
