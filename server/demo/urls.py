@@ -11,6 +11,8 @@ urlpatterns = [
 
     path('api/me', views.me, name='me'),
     path('api/challenge', views.challenge, name='challenge'),
+    path('api/test/', views.CodeProcessor.as_view(), name='challenge'),
+    path('api/kata/current/', views.CurrentKata.as_view(), name='currentKata'),
 
     path('', views.home, name='index'),
     re_path(r'^.*$', views.check_auth, name='index'),
