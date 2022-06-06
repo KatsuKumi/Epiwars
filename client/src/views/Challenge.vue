@@ -5,118 +5,33 @@
                 <v-tabs rounded="rounded" class="my-5"
                         v-model="tab" background-color="#222327"
                         fixed-tabs centered>
-                    <v-tab>Instructions</v-tab>
-                    <v-tab>Output</v-tab>
+                    <v-tab dark>Instructions</v-tab>
+                    <v-tab dark>Output</v-tab>
                 </v-tabs>
                 <v-tabs-items v-model="tab">
                     <v-tab-item key="0" :transition="false">
-                        <v-card class="elevation-0 rounded-xl" height="750" color="#222327">
-                            <v-card-text>
-                                <v-card-text class="text-body-1">
-                                    <p>
-                                        <strong>{{ Kata.kata }}</strong>
-                                    </p>
-                                    <div v-html="descriptionToHtml">
-
-                                    </div>
-                                </v-card-text>
-                            </v-card-text>
-                        </v-card>
+                        <Description :name="Kata.kata" :description="Kata.description"></Description>
                     </v-tab-item>
                     <v-tab-item key="1" class="rounded" :transition="false">
-                        <v-card class="elevation-0 rounded-xl" height="750" outlined>
-                            <v-card-text>
-                                <v-card-text class="text-body-1">
-                                    <p v-html="statusText">
-                                    </p>
-                                </v-card-text>
-                            </v-card-text>
-                        </v-card>
+                        <Output :output="output"></Output>
                     </v-tab-item>
                 </v-tabs-items>
             </v-col>
             <v-col cols="7" class="pr-5">
-                <v-sheet
-                    class="mx-auto my-5 rounded-t-xl"
-                    color="#222327"
-                >
-                    <div class="d-flex justify-space-between text-subtitle-1 py-3 px-5">
-                        <span style="min-width: 70px"></span>
-                        <span>Solution</span>
-                        <span style="min-width: 70px" class="text-caption text-decoration-underline font-italic text-right">{{ save_text.code }}</span>
-                    </div>
-                    <AceEditor
-                        v-model="Code"
-                        @init="editorInit"
-                        lang="c_cpp"
-                        theme="tomorrow_night"
-                        width="100%"
-                        height="400px"
-                        :options="{
-                        enableBasicAutocompletion: true,
-                        enableLiveAutocompletion: true,
-                        fontSize: 16,
-                        highlightActiveLine: true,
-                        enableSnippets: true,
-                        showLineNumbers: true,
-                        tabSize: 4,
-                        showPrintMargin: false,
-                        showGutter: true,
-                        }"
-                        :commands="[
-                            {
-                                name: 'save',
-                                bindKey: { win: 'Ctrl-s', mac: 'Command-s' },
-                                exec: dataSumit,
-                                readOnly: true,
-                            },
-                        ]"
-                    />
-                </v-sheet>
-                <v-sheet
-                    class="mx-auto mt-5 rounded-t-xl"
-                    color="#222327"
-                >
-                    <div class="d-flex justify-space-between text-subtitle-1 py-3 px-5">
-                        <span style="min-width: 70px"></span>
-                        <span>Sample Tests</span>
-                        <span style="min-width: 70px" class="text-caption text-decoration-underline font-italic text-right">{{ save_text.test }}</span>
-                    </div>
-                    <AceEditor
-                        v-model="Example"
-                        @init="editorInit"
-                        lang="c_cpp"
-                        theme="tomorrow_night"
-                        width="100%"
-                        height="230px"
-                        :options="{
-                        enableBasicAutocompletion: true,
-                        enableLiveAutocompletion: true,
-                        fontSize: 16,
-                        highlightActiveLine: true,
-                        enableSnippets: true,
-                        showLineNumbers: true,
-                        tabSize: 2,
-                        showPrintMargin: false,
-                        showGutter: true,
-                        }"
-                        :commands="[
-                            {
-                                name: 'save',
-                                bindKey: { win: 'Ctrl-s', mac: 'Command-s' },
-                                exec: dataSumit,
-                                readOnly: true,
-                            },
-                        ]"
-                    />
-                </v-sheet>
+                <CodeEditor title="Solution" :status="save_text.code" :code="Code" :submit-event="dataSubmit" height="400px" v-on:editCode="editCode"></CodeEditor>
+                <CodeEditor title="Sample Tests" :status="save_text.test" :code="Example" :submit-event="dataSubmit" height="230px" v-on:editCode="editExample"></CodeEditor>
                 <v-col class="text-right">
                     <v-btn class="ma-2" outlined color="indigo" @click="codeTest">
                         Test
                     </v-btn>
-                    <v-btn class="ma-2" color="indigo">
+                    <v-btn class="ma-2" color="indigo" @click="codeSubmit">
                         Attempt
                     </v-btn>
+                    <v-fab-transition>
+                        <v-btn class="ma-2" color="green darken-4" @click="goNext" v-show="showNext">
+                            {{ Kata.is_last ? 'Finish' : 'Next' }}
+                        </v-btn>
+                    </v-fab-transition>
                 </v-col>
             </v-col>
         </v-row>
@@ -128,25 +43,45 @@ import {marked} from 'marked'
 import HelloWorld from '../components/HelloWorld'
 import AceEditor from 'vuejs-ace-editor';
 import axios from "axios";
+import CodeEditor from "@/components/CodeEditor";
+import Description from "@/components/Description";
+import Output from "@/components/Output";
+
+
+String.prototype.isEmpty = function () {
+    // This doesn't work the same way as the isEmpty function used
+    // in the first example, it will return true for strings containing only whitespace
+    return (this.length === 0 || !this.trim());
+};
 
 export default {
     name: 'Home',
     data() {
         return {
             tab: 0,
-            content: "coco",
             save_text: {
                 code: 'Saved',
                 test: 'Saved'
             },
-            statusText: 'Your results will be shown here.',
+            output: {
+                loading: false,
+                status: 'Your results will be shown here.',
+                showStatus: true,
+                error: false,
+                stderr: "",
+                stdout: '',
+                count: 0,
+                passed: 0,
+                failed: 0,
+                tests: null,
+                time: 0,
+                type: 'test'
+            },
         }
     },
     computed: {
-        descriptionToHtml() {
-            if (this.$store.state.challenge.currentKata === null)
-                return null;
-            return marked(this.$store.state.challenge.currentKata.description);
+        showNext() {
+            return this.output.count !== 0 && this.output.passed === this.output.count && this.output.type === 'submit';
         },
         Kata() {
             if (this.$store.state.challenge.currentKata === null)
@@ -159,10 +94,6 @@ export default {
                 if (this.$store.state.challenge.currentKata === null)
                     return null;
                 return this.$store.state.challenge.currentKata.saved_test
-            },
-            set(value) {
-                this.save_text.test = "Not Saved"
-                this.$store.commit("updateExample", value);
             }
         },
         Code: {
@@ -170,16 +101,34 @@ export default {
                 if (this.$store.state.challenge.currentKata === null)
                     return null;
                 return this.$store.state.challenge.currentKata.saved_code
-            },
-            set(value) {
-                this.save_text.code = "Not Saved"
-                this.$store.commit("updateCode", value);
             }
         },
     },
     methods: {
-        dataSumit() {
-            this.$store.dispatch("saveCode");
+        goNext() {
+            axios.get("/api/kata/next/").then(response => {
+                if ("is_end" in response.data) {
+                    this.$store.commit('updateCurrentKata', null);
+                    this.$router.push('/ranking');
+                } else {
+                    this.resetOutput();
+                    this.tab = 1;
+                    this.$store.commit('updateCurrentKata', response.data);
+                    this.$router.push('/challenge');
+                }
+            }).catch(error => {
+                console.log(error);
+            });
+        },
+        editCode (value) {
+            this.save_text.code = "Not Saved"
+            this.$store.commit("updateCode", value);
+        },
+        editExample (value) {
+            this.save_text.test = "Not Saved"
+            this.$store.commit("updateExample", value);
+        },
+        saveTimer() {
             this.save_text.code = "Saving..."
             this.save_text.test = "Saving..."
             setTimeout(() => {
@@ -187,35 +136,82 @@ export default {
                 this.save_text.test = "Saved"
             }, 2000);
         },
-        codeTest() {
+        dataSubmit() {
             this.$store.dispatch("saveCode");
-            this.save_text.code = "Saving..."
-            this.save_text.test = "Saving..."
-            setTimeout(() => {
-                this.save_text.code = "Saved"
-                this.save_text.test = "Saved"
-            }, 2000);
+            this.saveTimer();
+        },
+        resetOutput() {
+            this.output = {
+                loading: false,
+                status: 'Your results will be shown here.',
+                showStatus: true,
+                error: false,
+                stderr: "",
+                stdout: '',
+                count: 0,
+                passed: 0,
+                failed: 0,
+                tests: null,
+                time: 0,
+            };
+        },
+        gotoOutput() {
             this.tab = 1;
-            this.statusText = "<b>Status:</b> Sending request...";
+        },
+        codeSubmit() {
+            this.resetOutput();
+            this.output.status = "<b>Status:</b> Submitting code...";
+            this.output.showStatus = true;
+            this.output.loading = true;
+            this.output.type = 'submit';
+            this.saveTimer();
+            this.gotoOutput()
+            let start = new Date().getTime();
+            axios.post("/api/test/submit/", {
+                code: this.Code,
+            }).then(res => {
+                let end = new Date().getTime();
+                this.processOutput(res.data, start, end);
+            }).catch(err => {
+                console.log(err);
+                this.output.status = "<b>Status:</b> " + err.message;
+            });
+        },
+        processOutput(data, start, end) {
+            this.output.loading = false;
+            this.output.showStatus = false;
+            this.output.time = (end - start) / 1000;
+            if (data.error) {
+                this.output.error = true;
+                this.output.stderr = data.stderr;
+                this.output.stdout = data.stdout;
+            } else {
+                this.output.tests = data.tests;
+                this.output.count = data.test_count;
+                this.output.passed = data.passed;
+                this.output.failed = data.failed;
+                this.output.stderr = data.stderr;
+            }
+        },
+        codeTest() {
+            this.resetOutput();
+            this.output.status = "<b>Status:</b> Sending request...";
+            this.output.showStatus = true;
+            this.output.loading = true;
+            this.output.type = 'test';
+            this.saveTimer();
+            this.gotoOutput()
+            let start = new Date().getTime();
             axios.post("/api/test/", {
                 code: this.Code,
                 test: this.Example,
             }).then(res => {
-                this.statusText = "<b>Status:</b> " + res.data.status;
+                let end = new Date().getTime();
+                this.processOutput(res.data, start, end);
             }).catch(err => {
                 console.log(err);
-                this.statusText = "<b>Status:</b> " + err.message;
+                this.output.status = "<b>Status:</b> " + err.message;
             });
-        },
-        editorInit: function () {
-            require('brace/ext/language_tools') //language extension prerequsite...
-            require('brace/mode/html')
-            require('brace/mode/c_cpp')
-            require('brace/mode/javascript')    //language
-            require('brace/mode/less')
-            require('brace/theme/tomorrow_night')
-            require('brace/snippets/javascript') //snippet
-            require('brace/snippets/c_cpp') //snippet
         }
     },
     mounted() {
@@ -223,6 +219,9 @@ export default {
         this.$store.dispatch("getCurrentKata");
     },
     components: {
+        Output,
+        Description,
+        CodeEditor,
         HelloWorld,
         AceEditor
     },
@@ -230,9 +229,37 @@ export default {
 </script>
 
 <style>
+.row + .row {
+    margin: 0;
+}
+
+.test-error {
+    color: #c05C48;
+}
+
+.test-success {
+    color: #6cec6c;
+}
+
+.bg-success {
+    border-color: #6cec6c !important;
+}
+
+.bg-error {
+    border-color: #c05C48 !important;
+}
+
+.bg-error pre {
+    border-color: #b63b3b !important;
+    background-color: #544747 !important;
+    border-width: 2px !important;
+    border-style: solid;
+}
+
 .theme--dark.v-sheet--outlined {
     border-width: 3px;
 }
+
 .v-application .text-caption {
     line-height: 28px;
 }
@@ -247,8 +274,7 @@ export default {
 
 pre {
     background-color: rgba(255, 255, 255, 0.1);
-    overflow: scroll;
-    overflow-y: hidden;
+    overflow-x: auto;
     border-radius: 10px;
     padding: 10px;
 }
