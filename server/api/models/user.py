@@ -13,6 +13,8 @@ class SavedKata(models.Model):
 
     user = models.ForeignKey('User', on_delete=models.CASCADE)
     kata = models.ForeignKey('Kata', on_delete=models.CASCADE)
+    solved = models.BooleanField(default=False)
+    solved_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     saved_code = models.TextField()
@@ -36,6 +38,7 @@ class SavedKata(models.Model):
 class User(AbstractUser):
     avatar = models.CharField(max_length=200, default="")
     current_kata = models.ForeignKey('Kata', on_delete=models.SET_NULL, null=True, blank=True)
+    current_kata_index = models.IntegerField(default=0)
 
     def __str__(self):
         return self.username
