@@ -3,6 +3,7 @@ from django.db import models
 from django.forms import model_to_dict
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Model
+from constance import config
 
 
 class SavedKata(models.Model):
@@ -20,6 +21,10 @@ class SavedKata(models.Model):
     saved_code = models.TextField()
     saved_test = models.TextField()
 
+    def is_last(self):
+        challenge = self.kata.challenge_set.filter(id=config.CHALLENGE_ID).first()
+        return challenge.katas.last() == self.kata
+
     def to_dict(self):
         return {
             'user': self.user.username,
@@ -29,6 +34,7 @@ class SavedKata(models.Model):
             'saved_code': self.saved_code,
             'saved_test': self.saved_test,
             'description': self.kata.description,
+            'is_last': self.is_last()
         }
 
     def __str__(self):

@@ -25,8 +25,8 @@ class Challenge(models.Model):
     startDate = models.DateTimeField()
     name = models.CharField(max_length=100)
     description = models.TextField()
-    first_kata = models.ForeignKey(Kata, on_delete=models.CASCADE, related_name='first_kata')
-    katas = SortedManyToManyField(Kata, sort_value_field_name='id')
+    first_kata = models.ForeignKey(Kata, on_delete=models.CASCADE, related_name='first_kata', null=True)
+    katas = SortedManyToManyField(Kata)
 
     def to_dict(self):
         return {

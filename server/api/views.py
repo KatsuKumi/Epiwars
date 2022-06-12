@@ -40,6 +40,9 @@ def me(request):
 def challenge(request):
     if request.user.is_anonymous:
         raise PermissionDenied()
+    if config.CHALLENGE_ID < 0\
+            or not Challenge.objects.filter(id=config.CHALLENGE_ID).exists():
+        raise Http404("No challenge found")
     challenge = Challenge.objects.get(pk=config.CHALLENGE_ID)
     return JsonResponse(challenge.to_dict(), encoder=ExtendedEncoder)
 
@@ -76,7 +79,7 @@ class CurrentKata(TemplateView):
         katas = challenge.katas.all()
         request.user.current_kata_index += 1
         request.user.save()
-        if katas.count() == request.user.current_kata_index:
+        if savedKata.to_dict()['is_last'] is True:
             return JsonResponse({'is_end': True}, encoder=ExtendedEncoder)
         request.user.current_kata = katas[request.user.current_kata_index]
         request.user.save()
@@ -87,11 +90,13 @@ class CurrentKata(TemplateView):
         savedKata.solved_at = None
         savedKata.save()
         kataDict = savedKata.to_dict()
-        kataDict['is_last'] = challenge.katas.count() == request.user.current_kata_index + 1
         return JsonResponse(kataDict, encoder=ExtendedEncoder)
 
 
     def current_kata(self, request):
+        if config.CHALLENGE_ID < 0\
+                or not Challenge.objects.filter(id=config.CHALLENGE_ID).exists():
+            raise Http404("No challenge found")
         challenge = Challenge.objects.get(pk=config.CHALLENGE_ID)
         if challenge.startDate > timezone.now():
             raise PermissionDenied()
@@ -108,12 +113,10 @@ class CurrentKata(TemplateView):
             savedKata.solved_at = None
             savedKata.save()
             kataDict = savedKata.to_dict()
-            kataDict['is_last'] = challenge.katas.count() == request.user.current_kata_index + 1
             return JsonResponse(kataDict, encoder=ExtendedEncoder)
         else:
             savedKata = SavedKata.objects.filter(user=request.user, kata=request.user.current_kata).first()
             kataDict = savedKata.to_dict()
-            kataDict['is_last'] = challenge.katas.count() == request.user.current_kata_index + 1
             return JsonResponse(kataDict, encoder=ExtendedEncoder)
 
     def get(self, request, *args, **kwargs):
@@ -163,6 +166,4 @@ class CodeProcessor(TemplateView):
             return self.test(request)
         else:
             return self.run(request)
-
-
 

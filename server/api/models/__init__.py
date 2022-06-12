@@ -1,2 +1,2 @@
 from .user import User, ExtendedEncoder, SavedKata
-from .challenge import Challenge
+from .challenge import Challenge, Kata
