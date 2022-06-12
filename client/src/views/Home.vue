@@ -8,12 +8,17 @@
         <div class="text-center text-subtitle-1 mb-5 text--secondary custom-font">{{ challengeDescription }}
         </div>
         <v-divider class="my-2"></v-divider>
-        <p class="text-center text-body-2 my-5 text--secondary">The challenge will start in</p>
-        <CountDown v-if="$store.state.challenge.info" :end-date="$store.state.challenge.info.startDate"></CountDown>
-        <v-divider class="my-2"></v-divider>
-        <v-btn href="/challenge" block color="primary" :disabled="!started">
-            Start challenge
-        </v-btn>
+        <div v-if="$store.state.challenge.info">
+            <p class="text-center text-body-2 my-5 text--secondary">The challenge will start in</p>
+            <CountDown v-if="$store.state.challenge.info" :end-date="$store.state.challenge.info.startDate"></CountDown>
+            <v-divider class="my-2"></v-divider>
+            <v-btn href="/challenge" block color="primary" :disabled="!started">
+                Start challenge
+            </v-btn>
+        </div>
+        <div v-else>
+            <p class="text-center text-body-2 my-5 text--secondary">No challenge is currently active</p>
+        </div>
     </v-card>
 </template>
 

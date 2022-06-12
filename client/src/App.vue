@@ -3,8 +3,10 @@
            :style="{ background: $vuetify.theme.themes['dark'].background }"
     >
         <Navbar></Navbar>
-        <v-main>
-            <router-view/>
+        <v-main app>
+            <v-container fluid>
+                <router-view/>
+            </v-container>
         </v-main>
         <Footer></Footer>
     </v-app>
