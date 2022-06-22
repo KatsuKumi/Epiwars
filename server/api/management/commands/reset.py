@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from api.models import Challenge, SavedKata, User
+from api.models import Challenge, SavedKata, User, Score
 from constance import config
 
 class Command(BaseCommand):
@@ -27,5 +27,9 @@ class Command(BaseCommand):
             user.current_kata = None
             user.current_kata_index = 0
             user.save()
+        scores = Score.objects.filter(challenge=challenge)
+        if scores.count() > 0:
+            print("Deleting %d scores for challenge %s" % (scores.count(), challenge.name))
+            scores.delete()
         print("Reset done")
 

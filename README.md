@@ -17,6 +17,10 @@
   <a href="https://epitech.eu">Epitech Website</a>
 </p>
 
+<a href="https://i.imgur.com/EQZlmfW.png">
+<img src="https://i.imgur.com/EQZlmfW.png"></img>
+</a>
+
 ## Key Features
 
 - Login with Github
@@ -31,6 +35,17 @@
 - Create a hackathon
 - Manage hackathons and challenges
 
+## Commands
+
+The server have few commands to help you to manage your hackathon.
+
+### Reset the current hackathon
+
+This command will reset the current hackathon including saved codes and scores.
+
+```bash
+$ python3 manage.py reset
+```
 
 ## How To Use
 
