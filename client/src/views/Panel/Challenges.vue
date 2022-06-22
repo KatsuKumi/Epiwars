@@ -1,7 +1,7 @@
 <template>
     <div class="fill-height">
         <PanelNavigation :selected-item="1"></PanelNavigation>
-        <v-container fluid>
+        <v-container>
             <v-row>
                 <v-col cols="12">
                     <h1 class="display-1 text-center">Challenges</h1>
@@ -14,7 +14,6 @@
                         <v-card-title>
                             <span class="headline">Challenges</span>
                         </v-card-title>
-                        <v-container>
                             <v-row align="center" justify="center" class="px-3">
                                 <v-col cols="6">
                                     <v-text-field
@@ -63,7 +62,6 @@
                                     </TableChallenge>
                                 </v-col>
                             </v-row>
-                        </v-container>
                     </v-card>
                 </v-col>
             </v-row>

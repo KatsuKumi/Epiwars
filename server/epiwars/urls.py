@@ -11,6 +11,7 @@ urlpatterns = [
     path('logout', include('github_auth.urls.logout')),
 
     path('api/me', views.me, name='me'),
+    path('api/ranking', views.ranking, name='rank'),
     path('api/katas/', panel_views.KataListView.as_view(), name='list_katas'),
     path('api/katas/<int:pk>/',panel_views. KataView.as_view(), name='challenge'),
     path('api/challenges/active', panel_views.active_challenge, name='active_challenge'),

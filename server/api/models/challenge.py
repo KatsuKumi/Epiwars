@@ -1,6 +1,7 @@
 from django.db import models
 from sortedm2m.fields import SortedManyToManyField
 
+
 class Kata(models.Model):
     name = models.CharField(max_length=200)
     test_script = models.TextField()
@@ -27,6 +28,7 @@ class Challenge(models.Model):
     description = models.TextField()
     first_kata = models.ForeignKey(Kata, on_delete=models.CASCADE, related_name='first_kata', null=True)
     katas = SortedManyToManyField(Kata)
+    participants = models.ManyToManyField('api.User', related_name='challenges')
 
     def to_dict(self):
         return {

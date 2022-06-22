@@ -13,10 +13,7 @@
     </facet>
   </component>
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$/client" />
-    <content url="file://$MODULE_DIR$/epiwars-runner-cli" />
-    <content url="file://$MODULE_DIR$/old_js" />
-    <content url="file://$MODULE_DIR$/server" />
+    <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

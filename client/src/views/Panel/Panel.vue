@@ -8,7 +8,7 @@
                 </v-col>
             </v-row>
             <v-row>
-                <v-col cols="4">
+                <v-col cols="12">
                     <v-card class="pa-2 rounded-lg mx-auto my-4" min-height="700" elevation="2"
                             color="#222327">
                         <v-card-title>
@@ -34,7 +34,7 @@
                                 <template v-slot:item.avatar="{ item }">
                                     <div class="p-2">
                                         <v-img
-                                            :src="item.avatar"
+                                            :src="item.user.avatar"
                                             lazy-src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAQAAAC0NkA6AAAALElEQVR42u3NMQEAAAwCoNm/9DL4eEEBcgORSCQSiUQikUgkEolEIpFIJJ0HCt8AM0IRFnUAAAAASUVORK5CYII="
                                             class="mx-4 rounded-circle"
                                             elevation="1"
@@ -47,14 +47,6 @@
                         </v-card-text>
                     </v-card>
                 </v-col>
-                <v-col cols="8">
-                    <v-card class="pa-2 rounded-lg mx-auto my-4" min-height="700" elevation="2"
-                            color="#222327">
-                        <v-card-title>
-                            <span class="headline">Challenges</span>
-                        </v-card-title>
-                    </v-card>
-                </v-col>
             </v-row>
         </v-container>
     </div>
@@ -62,6 +54,7 @@
 
 <script>
 import PanelNavigation from "@/components/PanelNavigation";
+import axios from "axios";
 export default {
     name: 'Panel',
     components: {PanelNavigation},
@@ -78,69 +71,17 @@ export default {
                     value: 'avatar',
                 },
                 {text: 'Position', value: 'position'},
-                {text: 'Username', value: 'username'},
+                {text: 'Username', value: 'user.username'},
                 {text: "Score", value: 'score', filterable: false}
             ],
-            ranking: [
-                {
-                    avatar: 'https://avatars.githubusercontent.com/u/1857648?v=4',
-                    position: 1,
-                    username: 'John Doe',
-                    score: 0
-                },
-                {
-                    avatar: 'https://avatars.githubusercontent.com/u/1857648?v=4',
-                    position: 2,
-                    username: 'John Doe',
-                    score: 0
-                },
-                {
-                    avatar: 'https://avatars.githubusercontent.com/u/1857648?v=4',
-                    position: 3,
-                    username: 'John Doe',
-                    score: 0
-                },
-                {
-                    avatar: 'https://avatars.githubusercontent.com/u/1857648?v=4',
-                    position: 4,
-                    username: 'John Doe',
-                    score: 0
-                },
-                {
-                    avatar: 'https://avatars.githubusercontent.com/u/1857648?v=4',
-                    position: 5,
-                    username: 'John Doe',
-                    score: 0
-                },
-                {
-                    avatar: 'https://avatars.githubusercontent.com/u/1857648?v=4',
-                    position: 6,
-                    username: 'John Doe',
-                    score: 0
-                },
-                {
-                    avatar: 'https://avatars.githubusercontent.com/u/1857648?v=4',
-                    position: 7,
-                    username: 'John Doe',
-                    score: 0
-                },
-                {
-                    avatar: 'https://avatars.githubusercontent.com/u/1857648?v=4',
-                    position: 8,
-                    username: 'John Doe',
-                    score: 0
-                },
-                {
-                    avatar: 'https://avatars.githubusercontent.com/u/1857648?v=4',
-                    position: 9,
-                    username: 'John Doe',
-                    score: 0
-                }
-            ]
+            ranking: []
         }
     },
     mounted() {
         this.$store.commit("hideFooter");
+        axios.get("/api/ranking").then(response => {
+            this.ranking = response.data;
+        });
     }
 }
 </script>

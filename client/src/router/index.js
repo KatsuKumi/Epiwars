@@ -6,6 +6,7 @@ import Challenge from '../views/Challenge.vue'
 import Panel from '../views/Panel/Panel.vue'
 import Katas from '../views/Panel/Katas.vue'
 import Challenges from '../views/Panel/Challenges.vue'
+import Ranking from '../views/Ranking.vue'
 //import Users from '../views/Panel/Users.vue'
 import Settings from '../views/Panel/Settings.vue'
 
@@ -26,6 +27,11 @@ Vue.use(VueRouter)
     path: '/challenge',
     name: 'Challenge',
     component: Challenge
+  },
+  {
+    path: '/ranking',
+    name: 'Ranking',
+    component: Ranking
   },
   {
     path: '/panel/',

@@ -141,6 +141,7 @@ export default {
             this.saveTimer();
         },
         resetOutput() {
+            this.$store.dispatch("refreshUser");
             this.output = {
                 loading: false,
                 status: 'Your results will be shown here.',
@@ -170,6 +171,7 @@ export default {
             axios.post("/api/test/submit/", {
                 code: this.Code,
             }).then(res => {
+                this.$store.dispatch("refreshUser");
                 let end = new Date().getTime();
                 this.processOutput(res.data, start, end);
             }).catch(err => {
@@ -212,11 +214,20 @@ export default {
                 console.log(err);
                 this.output.status = "<b>Status:</b> " + err.message;
             });
-        }
+        },
     },
     mounted() {
         this.$store.commit("hideFooter");
-        this.$store.dispatch("getCurrentKata");
+        this.$store.dispatch("getCurrentKata").then(() => {
+            if (this.Kata === null) {
+                this.$router.push('/');
+            }
+            if (this.Kata["is_ended"]) {
+                this.$router.push('/ranking');
+            }
+        }).catch(err => {
+            this.$router.push('/home');
+        });
     },
     components: {
         Output,
