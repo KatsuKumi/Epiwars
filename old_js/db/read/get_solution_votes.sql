@@ -1,1 +1,0 @@
-SELECT COUNT(liked) AS votes FROM sol_ratings WHERE solution_id = $1;

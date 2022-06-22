@@ -1,1 +1,0 @@
-SELECT COUNT(liked) AS likes FROM sol_ratings WHERE liked = true AND solution_id = $1;

@@ -1,1 +1,0 @@
-UPDATE users SET points = $1 WHERE id = $2;
