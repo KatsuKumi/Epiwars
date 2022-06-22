@@ -1,1 +1,0 @@
-SELECT COUNT(liked) AS dislikes FROM sol_ratings WHERE liked = false AND solution_id = $1;
