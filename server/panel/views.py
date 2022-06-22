@@ -7,14 +7,14 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from api.models import Challenge, SavedKata, ExtendedEncoder, Kata
-from django.contrib.admin.views.decorators import staff_member_required
 from constance import config
+from panel.middleware import Redirect
 
 
 def admin_only(view_func):
     def wrap(request, *args, **kwargs):
         if request.user.is_anonymous or not request.user.is_staff:
-            raise PermissionDenied()
+            raise Redirect('/')
         else:
             return view_func(request, *args, **kwargs)
 
@@ -31,7 +31,7 @@ def panel_redirect(request):
     return redirect('/panel/')
 
 
-@method_decorator([csrf_exempt, staff_member_required], name='dispatch')
+@method_decorator([csrf_exempt, admin_only], name='dispatch')
 class ChallengeListView(TemplateView):
 
     def get(self, request, *args, **kwargs):
@@ -51,7 +51,7 @@ class ChallengeListView(TemplateView):
         return JsonResponse(challenge.to_dict(), encoder=ExtendedEncoder)
 
 
-@method_decorator([csrf_exempt, staff_member_required], name='dispatch')
+@method_decorator([csrf_exempt, admin_only], name='dispatch')
 class ChallengeView(TemplateView):
 
     def get(self, request, *args, **kwargs):
@@ -78,7 +78,7 @@ class ChallengeView(TemplateView):
 
 
 @csrf_exempt
-@staff_member_required
+@admin_only
 def list_challenge_katas(request, pk):
     challenge = Challenge.objects.get(pk=pk)
     katas = challenge.katas.all().values()
@@ -86,7 +86,7 @@ def list_challenge_katas(request, pk):
     return JsonResponse(kata_list, encoder=ExtendedEncoder, safe=False)
 
 
-@method_decorator([csrf_exempt, staff_member_required], name='dispatch')
+@method_decorator([csrf_exempt, admin_only], name='dispatch')
 class KataListView(TemplateView):
 
     def get(self, request, *args, **kwargs):
@@ -101,7 +101,7 @@ class KataListView(TemplateView):
         return JsonResponse(kata.to_dict(), encoder=ExtendedEncoder)
 
 
-@method_decorator([csrf_exempt, staff_member_required], name='dispatch')
+@method_decorator([csrf_exempt, admin_only], name='dispatch')
 class KataView(TemplateView):
 
     def get(self, request, *args, **kwargs):
@@ -129,7 +129,7 @@ class KataView(TemplateView):
         return JsonResponse(kata.to_dict(), encoder=ExtendedEncoder)
 
 
-@method_decorator([csrf_exempt, staff_member_required], name='dispatch')
+@method_decorator([csrf_exempt, admin_only], name='dispatch')
 class ChallengeKataView(TemplateView):
 
     def post(self, request, *args, **kwargs):
@@ -188,7 +188,7 @@ class ChallengeKataView(TemplateView):
 
 
 @csrf_exempt
-@staff_member_required
+@admin_only
 def active_challenge(request):
     if request.method != 'POST':
         raise PermissionDenied()

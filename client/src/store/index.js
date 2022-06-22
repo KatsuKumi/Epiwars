@@ -49,14 +49,17 @@ export default new Vuex.Store({
         },
     },
     actions: {
-        getCurrentKata: async ({ commit }) => {
-            try {
-                axios.get('/api/kata/current/')
-                    .then(response => { commit('updateCurrentKata', response.data) })
-                    .catch(error => { console.log(error) })
-            } catch (error) {
-                console.log(error)
-            }
+        getCurrentKata: ({ commit }) => {
+            return new Promise((resolve, reject) => {
+                try {
+                    axios.get('/api/kata/current/')
+                        .then(response => { commit('updateCurrentKata', response.data); resolve(response.data); })
+                        .catch(error => { console.log(error); reject(error); });
+                } catch (error) {
+                    console.log(error);
+                    reject(error);
+                }
+            })
         },
         refreshCallenge: async ({state, commit, dispatch}) => {
             try {

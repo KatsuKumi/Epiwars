@@ -12,7 +12,7 @@
             <p class="text-center text-body-2 my-5 text--secondary">The challenge will start in</p>
             <CountDown v-if="$store.state.challenge.info" :end-date="$store.state.challenge.info.startDate"></CountDown>
             <v-divider class="my-2"></v-divider>
-            <v-btn href="/challenge" block color="primary" :disabled="!started">
+            <v-btn @click="startChallenge" block color="primary" :disabled="!started">
                 Start challenge
             </v-btn>
         </div>
@@ -25,6 +25,7 @@
 <script>
 import CountDown from "@/components/CountDown";
 import {DateTime} from "luxon";
+import axios from "axios";
 
 export default {
     components: {CountDown},
@@ -32,6 +33,13 @@ export default {
         return {
             timer: null,
             started: false
+        }
+    },
+    methods: {
+        startChallenge() {
+            axios.post('/api/challenge').then(response => {
+                window.location = '/challenge';
+            });
         }
     },
     computed: {

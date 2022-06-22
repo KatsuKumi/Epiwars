@@ -110,7 +110,7 @@
                                     </v-expansion-panels>
                                     <v-alert class="mt-5" outlined type="info" elevation="2"
                                              v-if="checkTestStatus(item) === 'test-success'">
-                                        Passed in {{ item.total_time * 1000 }}ms
+                                        Passed in {{ getTotal(item) * 1000 }}ms
                                     </v-alert>
                                     <v-alert class="mt-5" outlined type="error" elevation="2" v-else>
                                         Not passed
@@ -151,6 +151,9 @@ export default {
         }
     },
     methods: {
+        getTotal(item) {
+            return item.it.reduce((acc, cur) => acc + cur.time, 0)
+        },
         checkTestStatus(test) {
             for (let i = 0; i < test.it.length; i++) {
                 if (!test.it[i].passed) {

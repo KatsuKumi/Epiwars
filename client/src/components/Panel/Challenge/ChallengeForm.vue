@@ -17,69 +17,7 @@
                         </div>
                     </template>
                 </v-textarea>
-                <v-menu
-                    ref="menu"
-                    v-model="menu"
-                    :close-on-content-click="false"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                >
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                            :rules="requiredRule"
-                            v-model="newChallenge.startDate"
-                            label="Start date"
-                            prepend-icon="mdi-calendar"
-                            readonly
-                            outlined
-                            v-bind="attrs"
-                            v-on="on"
-                        ></v-text-field>
-                    </template>
-                    <v-date-picker
-                        :rules="requiredRule"
-                        v-model="newChallenge.startDate"
-                        year-icon="mdi-calendar-blank"
-                        prev-icon="mdi-skip-previous"
-                        next-icon="mdi-skip-next"
-                        :active-picker.sync="activePicker"
-                        min="1950-01-01"
-                    ></v-date-picker>
-                </v-menu>
-
-                <v-menu
-                    ref="menu"
-                    v-model="timeMenu"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    :return-value.sync="newChallenge.startTime"
-                    transition="scale-transition"
-                    offset-y
-                    max-width="290px"
-                    min-width="290px"
-                >
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                            :rules="requiredRule"
-                            v-model="newChallenge.startTime"
-                            label="Start time"
-                            prepend-icon="mdi-clock-time-four-outline"
-                            readonly
-                            outlined
-                            v-bind="attrs"
-                            v-on="on"
-                        ></v-text-field>
-                    </template>
-                    <v-time-picker
-                        v-if="timeMenu"
-                        v-model="newChallenge.startTime"
-                        format="24hr"
-                        scrollable
-                        full-width
-                        @click:minute="$refs.menu.save(newChallenge.startTime)"
-                    ></v-time-picker>
-                </v-menu>
+                <datetimepicker label="Select starting date" v-model="newChallenge.startDate"> </datetimepicker>
             </v-form>
         </v-card-text>
         <v-card-actions>
@@ -102,7 +40,12 @@
     </v-card>
 </template>
 <script>
+import datetimepicker from '../../DateTimePicker.vue'
+
 export default {
+    components: {
+        datetimepicker
+    },
     props: {
         text: {
             type: String,
@@ -122,7 +65,7 @@ export default {
                 id: null,
                 name: '',
                 description: '',
-                startDate: null,
+                startDate: Date.now(),
                 startTime: null,
             }),
         }
@@ -146,7 +89,9 @@ export default {
         }
     },
     mounted() {
-        this.newChallenge = Object.assign({}, this.challenge);
+        if (this.challenge.id) {
+            this.newChallenge = Object.assign({}, this.challenge);
+        }
     },
     methods: {
         createChallenge() {

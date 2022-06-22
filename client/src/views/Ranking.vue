@@ -1,10 +1,9 @@
 <template>
     <div class="fill-height">
-        <PanelNavigation :selected-item="0"></PanelNavigation>
         <v-container fluid>
             <v-row>
                 <v-col cols="12">
-                    <h1 class="display-1 text-center">Dashboard</h1>
+                    <h1 class="display-1 text-center">Ranking</h1>
                 </v-col>
             </v-row>
             <v-row>
@@ -77,11 +76,22 @@ export default {
             ranking: []
         }
     },
+    methods: {
+        getRanking() {
+            setTimeout(() => {
+                axios.get("/api/ranking").then(response => {
+                    this.ranking = response.data;
+                    this.getRanking();
+                });
+            }, 3000);
+        }
+    },
     mounted() {
-        this.$store.commit("hideFooter");
+        this.$store.commit("showFooter");
         axios.get("/api/ranking").then(response => {
             this.ranking = response.data;
         });
+        this.getRanking();
     }
 }
 </script>

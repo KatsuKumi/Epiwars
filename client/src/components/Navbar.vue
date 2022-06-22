@@ -13,9 +13,12 @@
             max-height="50" contain
             max-width="50"
         ></v-img>
-        <span><b>{{ $store.state.auth.user.email }}</b></span>
+        <div>
+            <span><b>{{ $store.state.auth.user.email }}</b></span>
+            <v-spacer></v-spacer>
+            <span v-if="$route.name === 'Challenge'">Score : <b>{{ $store.state.auth.user.score }}</b></span>
+        </div>
         <v-spacer></v-spacer>
-
         <v-btn
             href="/logout"
             text>
@@ -29,6 +32,12 @@
 import axios from 'axios';
 
 export default {
+    props: {
+        showScore: {
+            type: Boolean,
+            default: false
+        }
+    },
     data: () => ({
     }),
 

@@ -4,6 +4,7 @@
         :items="challenges"
         :items-per-page="5"
         class="elevation-0"
+        full-width
         style="background-color: #222327"
     >
         <template v-slot:item.description="{ item }">
@@ -179,13 +180,11 @@ export default {
                 return;
             }
             this.editLoading = true;
-            let hour = item.startTime.split(":")[0];
-            let minute = item.startTime.split(":")[1];
-            let dateTime = DateTime.fromISO(item.startDate).set({hour, minute}).toISO();
+            console.log(item.startDate);
             axios.put('/api/challenges/' + item.id + '/', {
                 name: item.name,
                 description: item.description,
-                startDate: dateTime,
+                startDate: item.startDate,
             }).then(response => {
                 this.$emit("update", () => {
                     this.editDialog[item.id] = false;
@@ -198,17 +197,11 @@ export default {
 
         },
         serializeChallenge(challenge) {
-            let date = DateTime.fromISO(challenge.startDate);
-            let hours = date.hour.toString().padStart(2, '0');
-            let minutes = date.minute.toString().padStart(2, '0');
-            let time = hours + ":" + minutes;
-            let startDate = date.toFormat("yyyy-MM-dd");
             return {
                 id: challenge.id,
                 name: challenge.name,
                 description: challenge.description,
-                startDate: startDate,
-                startTime: time
+                startDate: challenge.startDate
             };
         },
     }

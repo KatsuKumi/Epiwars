@@ -14,7 +14,6 @@
                         <v-card-title>
                             <span class="headline">Katas</span>
                         </v-card-title>
-                        <v-container>
                             <v-row align="center" justify="center" class="px-3">
                                 <v-col cols="6">
                                     <v-text-field
@@ -63,7 +62,6 @@
                                     </TableKatas>
                                 </v-col>
                             </v-row>
-                        </v-container>
                     </v-card>
                 </v-col>
             </v-row>
