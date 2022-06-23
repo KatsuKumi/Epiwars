@@ -196,11 +196,11 @@ class CodeProcessor(TemplateView):
             kata_weight = 1 + self.get_kata_index(challenge, request.user.current_kata) / 5
             calculated_score = 15000
             if first_solved is not None:
-                calculated_score = (calculated_score - (timezone.now() - first_solved.solved_at).total_seconds() * 11) * kata_weight
+                calculated_score = (calculated_score - (timezone.now() - first_solved.solved_at).total_seconds() * 11)
             score = Score.objects.filter(user=request.user, challenge=challenge)
             if score.exists():
                 my_score = score.first()
-                my_score.score += calculated_score
+                my_score.score += calculated_score * kata_weight
                 my_score.save()
             else:
                 score = Score(user=request.user, challenge=savedKata.challenge, score=calculated_score)
